@@ -1,0 +1,25 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#box {
+	margin: 10px auto 0 auto;
+}
+
+.blocks {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	display: block;
+	border: 1px solid #000;
+	user-select: none;
+}
+
+#time {
+	width: 100px;
+	height: 30px;
+	border: 1px solid black;
+	margin: 10px auto 0 auto;
+}

@@ -1,20 +1,24 @@
 
-class Obj {
+class Game {
 	constructor(row, col ,countMax, box, time) {
 		this.row = row;
 		this.col = col;
 		this.countMax = countMax; // 生成雷的数量
 		this.box = box;	
 		this.time = time;
+		this.restart = restart;
 		this.isFirstOpen = true;
 		this.timer = false;
 		this.elements = [];  // 存放每个元素的二维数组
+		this.gameOver = false;
 	}
 
-	stop() {
-		return false;
+	init() {
+		this.restart.addEventListener('click', () => {
+			location.reload();
+		}, false);
+		this.init_elements();
 	}
-
 	//初始化得到扫雷盘的二维数组
 	init_elements() {
 		let grid = '';
@@ -45,13 +49,15 @@ class Obj {
 		}
 	}
 
+	//每个方块元素的点击触发函数
 	element_click(i, j, e) {
+		if(this.gameOver) { return }
 		if(!this.timer) {
 			this.timebegin();
 		}
 		console.log(i + ',' + j);
 
-		if(this.elements[i][j].isopen) {
+		if(this.elements[i][j].isOpen) {
 			return;
 		}
 
@@ -59,6 +65,7 @@ class Obj {
 			// 鼠标左键事件
 			if(this.isFirstOpen) {
 				this.isFirstOpen = false;
+				this.begin = true;
 				this.createMine(i, j);
 			}
 			this.open_element(i, j);
@@ -79,16 +86,17 @@ class Obj {
 			}
 		}
 		clearInterval(this.timer);
+		this.gameOver = true;
 		alert('你赢了！用时' + this.time.innerHTML);
 	}
 
 	//打开坐标为 i, j的方块
 	open_element(i, j) {
 		 //被点击的元素
-		this.elements.style.backgroundColor= "#ccc";
-		this.elements.isopen = true;
+		this.elements[i][j].style.background= "#ccc";
+		this.elements[i][j].isOpen = true;
 
-		if(this.elements.isMine) {
+		if(this.elements[i][j].isMine) {
 			for(let a = 0; a < this.row; a++) {
 				for(let b = 0; b < this.col; b++) {
 					if(this.elements[a][b].isMine) {
@@ -98,11 +106,13 @@ class Obj {
 				}
 			}
 			clearInterval(this.timer);
+			this.gameOver = true;
 			alert('游戏结束！');
-		} else if(this.elements.count == 0) {
+			this.restart.style.opacity = 1;
+		} else if(!this.elements[i][j].count) {
 			this.chainReact(i, j);
 		} else {
-			this.elements.innerHTML = this.elements.count;
+			this.elements[i][j].innerHTML = this.elements[i][j].count;
 		} 
 	}
 
@@ -111,19 +121,22 @@ class Obj {
 	chainReact(i, j) {
 		for(let a = i - 1; a < i + 2; a ++) {
 			for(let b = j - 1; b < j + 2; b ++) {
-				if(a > -1 && b > -1 && a < this.row && b < this.col && !this.elements[a][b].isOpen && !this.elements[a][b].isMine) {
+				if(a > -1 && b > -1 && a < this.row && b < this.col && !this.elements[a][b].isOpen && !this.elements[a][b].isMine ) {
 					//递归打开方格
 					this.open_element(a, b);
 				}
 			}
 		}
 	}
+
+	//创建地雷函数
 	createMine(i, j) {
 		let count = 0;
 		while(count < this.countMax) {
 			let im = parseInt(Math.random() * this.row);
 			let jm = parseInt(Math.random() * this.col);
 			if(im != i && im != j && !this.elements[im][jm].isMine) {
+				this.elements[im][jm].count = 0;
 				this.elements[im][jm].isMine = true;
 				count++;
 				// 让该9宫格内的地雷数字+1
@@ -145,7 +158,7 @@ class Obj {
 		}, 1000);
 	}
 }
+var row = 1;
+var obj = new Game(10, 10, 10, document.getElementById('box'), document.getElementById('time'), document.getElementById('restart'));
 
-var obj = new Obj(10, 10, 10, document.getElementById('box'), document.getElementById('time'));
-
-obj.init_elements();
+obj.init();

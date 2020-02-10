@@ -13,12 +13,16 @@ class Game {
 		this.gameOver = false;
 	}
 
+
+	//初始化函数，为添加事件和添加扫雷盘
 	init() {
 		this.restart.addEventListener('click', () => {
 			location.reload();
 		}, false);
 		this.init_elements();
 	}
+
+
 	//初始化得到扫雷盘的二维数组
 	init_elements() {
 		let grid = '';
@@ -151,6 +155,8 @@ class Game {
 			}
 		}
 	}
+
+	//开始计时
 	timebegin() {
 		this.time.innerHTML = '0s';
 		this.timer = setInterval(() => {
@@ -158,7 +164,8 @@ class Game {
 		}, 1000);
 	}
 }
-var row = 1;
+
+
 var obj = new Game(10, 10, 10, document.getElementById('box'), document.getElementById('time'), document.getElementById('restart'));
 
 obj.init();

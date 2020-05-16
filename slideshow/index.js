@@ -26,6 +26,7 @@ class SlidePage {
         this.allAddEvent();  
         
     }
+
     // 添加事件的方法
     allAddEvent() {
         this._box_el.addEventListener('mouseenter', () => {
@@ -57,7 +58,8 @@ class SlidePage {
         }, false);
         this.right_btn_el.addEventListener('click', () => {
             if(!this.is_play) {
-                this.pageJump(this.index + 1);            }
+                this.pageJump(this.index + 1);          
+            }
         }, false);
     }
 

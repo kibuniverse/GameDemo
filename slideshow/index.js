@@ -63,9 +63,7 @@ class SlidePage {
 
     // 开始自动滑动
     startAutoSlide() {
-        this.auto_play_timer = setTimeout(() => {
-            this.pageAutoSlideGo();
-        }, 2000);
+        this.pageAutoSlideGo();
     }
 
     //停止自动滑动
